@@ -41,7 +41,9 @@ namespace DataExporter.Services
         /// <returns>Returns a ReadPolicyDto.</returns>
         public async Task<ReadPolicyDto?> ReadPolicyAsync(int id)
         {
-            var policy = await _dbContext.Policies.SingleAsync(x => x.Id == id);
+            // If SingleAsync doesn't find an entity, it throws an exception. FindAsync returns null instead, which maps cleanly to 404.
+            // Worth mentioning that FindAsync is for PK only, for non-pk lookups, use FirstOrDefaultAsync.
+            var policy = await _dbContext.Policies.FindAsync(id); 
             if (policy == null)
             {
                 return null;

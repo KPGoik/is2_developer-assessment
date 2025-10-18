@@ -8,3 +8,7 @@ Accept: application/json
 ###
 GET https://localhost:7246/Policies/9999
 Accept: application/json
+
+###
+GET https://localhost:7246/Policies/abc
+Accept: application/json
