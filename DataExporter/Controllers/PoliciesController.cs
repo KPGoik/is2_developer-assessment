@@ -29,10 +29,6 @@ namespace DataExporter.Controllers
         public async Task<IActionResult> GetPolicies()
         {
             var policies = await _policyService.ReadPoliciesAsync();
-            if(policies == null || policies.Count == 0)
-            {
-                return NotFound();
-            }
             return Ok(policies);
         }
 
