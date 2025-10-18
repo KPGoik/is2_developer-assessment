@@ -1,4 +1,5 @@
 ﻿using DataExporter.Dtos;
+using DataExporter.Model;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -31,7 +32,13 @@ namespace DataExporter.Services
         /// <returns>Returns a list of ReadPoliciesDto.</returns>
         public async Task<IList<ReadPolicyDto>> ReadPoliciesAsync()
         {
-            return await Task.FromResult(new List<ReadPolicyDto>());
+            return await _dbContext.Policies.Select(ReadPoliciesAsync => new ReadPolicyDto
+            {
+                Id = ReadPoliciesAsync.Id,
+                PolicyNumber = ReadPoliciesAsync.PolicyNumber,
+                Premium = ReadPoliciesAsync.Premium,
+                StartDate = ReadPoliciesAsync.StartDate
+            }).ToListAsync();
         }
 
         /// <summary>

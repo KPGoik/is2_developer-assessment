@@ -12,3 +12,7 @@ Accept: application/json
 ###
 GET https://localhost:7246/Policies/abc
 Accept: application/json
+
+###
+GET https://localhost:7246/Policies/AllPolicies
+Accept: application/json

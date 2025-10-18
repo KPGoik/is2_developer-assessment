@@ -15,6 +15,9 @@ namespace DataExporter.Controllers
             _policyService = policyService;
         }
 
+        // IActionResult is used here and I'm following suit.
+        // In a real project, I'd consider and suggest using ActionResult<T> for better type safety.
+
         [HttpPost]
         public async Task<IActionResult> PostPolicies([FromBody]CreatePolicyDto createPolicyDto)
         {         
@@ -22,10 +25,15 @@ namespace DataExporter.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("AllPolicies")]
         public async Task<IActionResult> GetPolicies()
         {
-            return Ok();
+            var policies = await _policyService.ReadPoliciesAsync();
+            if(policies == null || policies.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(policies);
         }
 
         [HttpGet("{policyId}")]
