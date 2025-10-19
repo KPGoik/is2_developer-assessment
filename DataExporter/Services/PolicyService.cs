@@ -46,10 +46,6 @@ namespace DataExporter.Services
             { 
             await _dbContext.SaveChangesAsync();
             }
-            catch (DbUpdateException)
-            {
-                return null;
-            }
 
             catch (Exception)
             {
@@ -106,6 +102,19 @@ namespace DataExporter.Services
             };
 
             return policyDto;
+        }
+
+        public async Task<IList<ExportDto>> ExportPoliciesAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _dbContext.Policies
+                .Where(p => p.StartDate >= startDate && p.StartDate <= endDate)
+                .Select(policy => new ExportDto
+                {
+                    PolicyNumber = policy.PolicyNumber,
+                    Premium = policy.Premium,
+                    StartDate = policy.StartDate,
+                    Notes = policy.Notes.Select(note => note.Text).ToList()
+                }).ToListAsync();
         }
     }
 }

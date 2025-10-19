@@ -52,10 +52,11 @@ namespace DataExporter.Controllers
         }
 
 
-        [HttpPost("export")]
+        [HttpGet("export")] //We're not actually exporting anything, just returning a list. This is therefore a GET.
         public async Task<IActionResult> ExportData([FromQuery]DateTime startDate, [FromQuery] DateTime endDate)
         {
-            return Ok();
+            var exportData = await _policyService.ExportPoliciesAsync(startDate, endDate);
+            return Ok(exportData);
         }
     }
 }

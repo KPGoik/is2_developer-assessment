@@ -52,3 +52,7 @@ content-type: application/json
   "Premium": 200.00,
   "StartDate": "2020/01/10 10:00"
 }
+
+###
+GET https://localhost:7246/Policies/export?startDate=2024-04-01T00:00:00&endDate=2030-12-31T23:59:59
+Accept: application/json
