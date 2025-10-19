@@ -2,6 +2,7 @@
 using DataExporter.Model;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using System.Globalization;
 
 
 namespace DataExporter.Services
@@ -36,7 +37,7 @@ namespace DataExporter.Services
             {
                 PolicyNumber = createPolicyDto.PolicyNumber,
                 Premium = createPolicyDto.Premium,
-                StartDate = createPolicyDto.StartDate
+                StartDate = DateTime.ParseExact(createPolicyDto.StartDate, PolicyServiceHelper.DateFormat, CultureInfo.InvariantCulture) //We don't need to use TryParse here because the validator already checked the format.
             };
 
             _dbContext.Policies.Add(entity);

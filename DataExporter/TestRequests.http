@@ -17,11 +17,38 @@ Accept: application/json
 GET https://localhost:7246/Policies/AllPolicies
 Accept: application/json
 
-###
+### Acceptable Request to create a new policy
 POST https://localhost:7246/Policies/
 content-type: application/json
 {
   "PolicyNumber": "HSCX1006",
   "Premium": 100.00,
   "StartDate": "2024-01-01T00:00:00"
+}
+
+### Invalid Policy Number
+POST https://localhost:7246/Policies/
+content-type: application/json
+{
+  "PolicyNumber": "",
+  "Premium": 150.00,
+  "StartDate": "2024-01-01T00:00:00"
+}
+
+### Invalid Premium
+POST https://localhost:7246/Policies/
+content-type: application/json
+{
+  "PolicyNumber": "HSCX1006",
+  "Premium": -50.00,
+  "StartDate": "2024-01-01T00:00:00"
+}
+
+### Invalid Start Date
+POST https://localhost:7246/Policies/
+content-type: application/json
+{
+  "PolicyNumber": "HSCX1006",
+  "Premium": 200.00,
+  "StartDate": "2020/01/10 10:00"
 }
