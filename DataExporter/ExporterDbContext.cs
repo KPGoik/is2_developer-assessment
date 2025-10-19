@@ -27,9 +27,9 @@ namespace DataExporter
                 new Policy() { Id = 5, PolicyNumber = "HSCX1005", Premium = 100, StartDate = new DateTime(2024, 4, 1) });
 
             modelBuilder.Entity<Note>().HasData(new Note() { Id = 1, Text = "HSCX1001: Note 1", PolicyId = 1 },
-                new Note() { Id = 2, Text = "HSCX1002: Note 1", PolicyId = 2 },
-                new Note() { Id = 2, Text = "HSCX1002: Note 2", PolicyId = 2 },
-                new Note() { Id = 3, Text = "HSCX1003: Note 1", PolicyId = 3 });
+                new Note() { Id = 3, Text = "HSCX1002: Note 1", PolicyId = 2 },
+                new Note() { Id = 4, Text = "HSCX1002: Note 2", PolicyId = 2 },
+                new Note() { Id = 5, Text = "HSCX1003: Note 1", PolicyId = 3 });
 
             // EF Core can infer the relationship by convention
             // Defined explicitly here for readibility and future customisation (is this something done in industry, or do you just run off inferred conventions?)
