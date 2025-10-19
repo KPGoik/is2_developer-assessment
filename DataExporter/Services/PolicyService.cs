@@ -1,6 +1,7 @@
 ﻿using DataExporter.Dtos;
 using DataExporter.Model;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 
 namespace DataExporter.Services
@@ -8,11 +9,13 @@ namespace DataExporter.Services
     public class PolicyService
     {
         private ExporterDbContext _dbContext;
+        private IValidator<CreatePolicyDto> _validator;
 
-        public PolicyService(ExporterDbContext dbContext)
+        public PolicyService(ExporterDbContext dbContext, IValidator<CreatePolicyDto> validator)
         {
             _dbContext = dbContext;
             _dbContext.Database.EnsureCreated();
+            _validator = validator;
         }
 
         /// <summary>
@@ -22,14 +25,36 @@ namespace DataExporter.Services
         /// <returns>Returns a ReadPolicyDto representing the new policy, if succeded. Returns null, otherwise.</returns>
         public async Task<ReadPolicyDto?> CreatePolicyAsync(CreatePolicyDto createPolicyDto)
         {
+            var results = await _validator.ValidateAsync(createPolicyDto);
+
+            if (!results.IsValid)
+            {
+                return null;
+            }
+
             var entity = new Policy()
             {
                 PolicyNumber = createPolicyDto.PolicyNumber,
                 Premium = createPolicyDto.Premium,
                 StartDate = createPolicyDto.StartDate
             };
+
             _dbContext.Policies.Add(entity);
+
+            try 
+            { 
             await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
+
+            catch (Exception)
+            {
+                return null;
+            }
+            
 
             return new ReadPolicyDto()
             {

@@ -22,6 +22,10 @@ namespace DataExporter.Controllers
         public async Task<IActionResult> PostPolicies([FromBody]CreatePolicyDto createPolicyDto)
         {         
             var policy = await _policyService.CreatePolicyAsync(createPolicyDto);
+            if (policy == null)
+            {
+                return BadRequest("Invalid policy data.");
+            }
             return Ok(policy);
         }
 
