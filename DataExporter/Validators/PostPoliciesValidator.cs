@@ -11,7 +11,7 @@ public class PostPoliciesValidator : AbstractValidator<DataExporter.Dtos.CreateP
             .MaximumLength(20);
         RuleFor(policy => policy.Premium)
             .NotEmpty()
-            .GreaterThan(0);
+            .GreaterThanOrEqualTo(0);
         RuleFor(policy => policy.StartDate)
             .NotEmpty()
             .Must(s => DateTime.TryParseExact(
