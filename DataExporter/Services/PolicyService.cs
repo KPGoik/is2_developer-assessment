@@ -35,21 +35,22 @@ namespace DataExporter.Services
 
             var entity = new Policy()
             {
-                PolicyNumber = createPolicyDto.PolicyNumber,
+                //We can tell the PostPoliciesValidator already checked for nulls and format, so we can use the ! operator here.
+                PolicyNumber = createPolicyDto.PolicyNumber!,
                 Premium = createPolicyDto.Premium,
-                StartDate = DateTime.ParseExact(createPolicyDto.StartDate, PolicyServiceHelper.DateFormat, CultureInfo.InvariantCulture) //We don't need to use TryParse here because the validator already checked the format.
+                StartDate = DateTime.ParseExact(createPolicyDto.StartDate!, PolicyServiceHelper.DateFormat, CultureInfo.InvariantCulture) //We don't need to use TryParse here because the validator already checked the format.
             };
 
             _dbContext.Policies.Add(entity);
 
             try 
             { 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
 
             catch (Exception)
             {
-                return null;
+                return null; //As discussed in the controller, this is horrible error handling. In a real project, I'd implement proper error handling based on the exception type.
             }
             
 
@@ -69,12 +70,12 @@ namespace DataExporter.Services
         /// <returns>Returns a list of ReadPoliciesDto.</returns>
         public async Task<IList<ReadPolicyDto>> ReadPoliciesAsync()
         {
-            return await _dbContext.Policies.Select(ReadPoliciesAsync => new ReadPolicyDto
+            return await _dbContext.Policies.Select(p => new ReadPolicyDto
             {
-                Id = ReadPoliciesAsync.Id,
-                PolicyNumber = ReadPoliciesAsync.PolicyNumber,
-                Premium = ReadPoliciesAsync.Premium,
-                StartDate = ReadPoliciesAsync.StartDate
+                Id = p.Id,
+                PolicyNumber = p.PolicyNumber,
+                Premium = p.Premium,
+                StartDate = p.StartDate
             }).ToListAsync();
         }
 
@@ -104,17 +105,26 @@ namespace DataExporter.Services
             return policyDto;
         }
 
+        /// <summary>
+        /// Exports policies within a date range.
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns>Returns a list of ExportDto within the given time range.</returns>
+
         public async Task<IList<ExportDto>> ExportPoliciesAsync(DateTime startDate, DateTime endDate)
         {
-            return await _dbContext.Policies
-                .Where(p => p.StartDate >= startDate && p.StartDate <= endDate)
-                .Select(policy => new ExportDto
-                {
-                    PolicyNumber = policy.PolicyNumber,
-                    Premium = policy.Premium,
-                    StartDate = policy.StartDate,
-                    Notes = policy.Notes.Select(note => note.Text).ToList()
-                }).ToListAsync();
-        }
+                return await _dbContext.Policies
+                    .Where(p => p.StartDate >= startDate && p.StartDate <= endDate)
+                    .Select(policy => new ExportDto
+                    {
+                        PolicyNumber = policy.PolicyNumber,
+                        Premium = policy.Premium,
+                        StartDate = policy.StartDate,
+                        Notes = policy.Notes.Select(note => note.Text).ToList()
+                    }).ToListAsync();
+
+            //For a larger results set, would be worth to add pagination here.
+            }
     }
 }

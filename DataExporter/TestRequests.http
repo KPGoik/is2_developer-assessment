@@ -1,20 +1,20 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 
-###
+### Acceptable request
 GET https://localhost:7246/Policies/1
 Accept: application/json
 
 
-###
+### Should return 404 - Not Found
 GET https://localhost:7246/Policies/9999
 Accept: application/json
 
-###
+### Should return 400 - Bad Request
 GET https://localhost:7246/Policies/abc
 Accept: application/json
 
-###
-GET https://localhost:7246/Policies/AllPolicies
+### - Should return all policies.
+GET https://localhost:7246/Policies/
 Accept: application/json
 
 ### Acceptable Request to create a new policy
@@ -53,6 +53,14 @@ content-type: application/json
   "StartDate": "2020/01/10 10:00"
 }
 
-###
+### Valid Export request
 GET https://localhost:7246/Policies/export?startDate=2024-04-01T00:00:00&endDate=2030-12-31T23:59:59
+Accept: application/json
+
+### Malformed export request
+GET https://localhost:7246/Policies/export?endDate=2030-12-31T23:59:59
+Accept: application/json
+
+### REALLY malformed export request
+GET https://localhost:7246/Policies/export?startDate=2024-04-aaaaaaaaaaaaaaaaaaa01T00:00:00&endDate=2030-12-31T23:59:59
 Accept: application/json

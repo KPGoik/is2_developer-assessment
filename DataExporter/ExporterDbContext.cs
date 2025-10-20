@@ -6,8 +6,9 @@ namespace DataExporter
 {
     public class ExporterDbContext : DbContext
     {
-        public DbSet<Policy> Policies { get; set; }
-        public DbSet<Note> Notes { get; set; }
+        //Null forgiving operators here because the properties are always initialised by EF Core.
+        public DbSet<Policy> Policies { get; set; } = null!;
+        public DbSet<Note> Notes { get; set; } = null!; 
 
         public ExporterDbContext(DbContextOptions<ExporterDbContext> options) : base(options)
         { 

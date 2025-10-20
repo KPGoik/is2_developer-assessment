@@ -2,11 +2,11 @@
 {
     public class ExportDto
     {
-        public string? PolicyNumber { get; set; }
+        public string PolicyNumber { get; set; } = null!;
         public decimal Premium { get; set; }
         public DateTime StartDate { get; set; }
 
         // A list of the notes' text.
-        public IList<string> Notes { get; set; }
+        public IList<string>? Notes { get; set; }
     }
 }

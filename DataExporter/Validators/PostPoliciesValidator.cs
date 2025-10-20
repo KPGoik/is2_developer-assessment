@@ -10,7 +10,7 @@ public class PostPoliciesValidator : AbstractValidator<DataExporter.Dtos.CreateP
             .NotEmpty()
             .MaximumLength(20);
         RuleFor(policy => policy.Premium)
-            .NotEmpty()
+            .NotNull()
             .GreaterThanOrEqualTo(0);
         RuleFor(policy => policy.StartDate)
             .NotEmpty()

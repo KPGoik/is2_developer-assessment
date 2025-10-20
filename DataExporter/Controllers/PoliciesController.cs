@@ -1,6 +1,7 @@
 ﻿using DataExporter.Dtos;
 using DataExporter.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DataExporter.Controllers
 {
@@ -24,13 +25,15 @@ namespace DataExporter.Controllers
             var policy = await _policyService.CreatePolicyAsync(createPolicyDto);
             if (policy == null)
             {
-                return BadRequest("Invalid policy data.");
+                // I HATE this. If I were to work on this further, I'd use proper error handling and return specific errors based on what went wrong in the service.
+                // Especially because it might not necessarily be a bad request, something could go wrong on our end.
+                return BadRequest("Could not create policy."); 
             }
-            return Ok(policy);
+            return CreatedAtAction(nameof(GetPolicy), new { policyId = policy.Id }, policy); //201 instead of 200 for creation.
         }
 
 
-        [HttpGet("AllPolicies")]
+        [HttpGet("")]
         public async Task<IActionResult> GetPolicies()
         {
             var policies = await _policyService.ReadPoliciesAsync();
@@ -45,16 +48,19 @@ namespace DataExporter.Controllers
             {
                 return NotFound();
             }
-            else
-            {
-                return Ok(policy);
-            }
+
+            return Ok(policy);
         }
 
 
-        [HttpGet("export")] //We're not actually exporting anything, just returning a list. This is therefore a GET.
-        public async Task<IActionResult> ExportData([FromQuery]DateTime startDate, [FromQuery] DateTime endDate)
+        [HttpGet("export")] // Get instead of post because there's no body.
+        public async Task<IActionResult> ExportData([FromQuery, BindRequired]DateTime startDate, [FromQuery, BindRequired] DateTime endDate)
         {
+            if(endDate< startDate)
+            {
+                return BadRequest("End date must be greater than or equal to start date.");
+            }
+
             var exportData = await _policyService.ExportPoliciesAsync(startDate, endDate);
             return Ok(exportData);
         }
