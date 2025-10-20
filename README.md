@@ -1,4 +1,19 @@
-﻿# Data Exporter
+﻿# Comments
+
+* Currently, CreatePolicyAsync returns null on both validation and DB issues, which hides the error cause. I'd rather throw specific exceptions and rely on global exception classes to deal with.
+* I regret not writing unit tests; the .http file is good and very easy to modify, but it would have saved a bit of time to have it done automatically - definitely something I'll do in larger projects.
+* To avoid ambiguity, I wouldn't reuse startDate/endDate as query params when the DTO itself has a StartDate field.
+* Currently the model only has a few entries. I'd add pagination to responses if this were to be a more realistically-sized set.
+* I'd prefer to use ActionResult<> over IActionResult. Current actions only ever return the same shape, so we may as well be safer.
+* FluentValidation was used to check CreatePolicy requests.
+
+
+
+To test, a .http file was created and worked with. No other test scripts are provided with this submission.
+
+
+
+# Data Exporter
 
 The **Data Exporter** app is a small RESTful API implemented in .NET 6. It manages insurance policies and any notes the brokers might have added to the policies. It also provides a way to query and map the data to a format an external system might require for importing.
 
@@ -12,6 +27,6 @@ The **Data Exporter** app is a small RESTful API implemented in .NET 6. It manag
 
 ## Remarks
 
-- The tasks can be completed in any order.
-- Any third party library can be used to implement some of the functionality required.
-- To test the API, any tool like cURL or Postman can be used and the scripts should be included in the submission.
+* The tasks can be completed in any order.
+* Any third party library can be used to implement some of the functionality required.
+* To test the API, any tool like cURL or Postman can be used and the scripts should be included in the submission.
