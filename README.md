@@ -6,6 +6,7 @@
 * Currently the model only has a few entries. I'd add pagination to responses if this were to be a more realistically-sized set.
 * I'd prefer to use ActionResult<> over IActionResult. Current actions only ever return the same shape, so we may as well be safer.
 * FluentValidation was used to check CreatePolicy requests.
+* Currently, all DateTimes aren't normalised for globalisation - different time zones, etc.
 
 
 
